@@ -8,6 +8,7 @@ public class PlayerBulletScript : MonoBehaviour
     [SerializeField] private float bulletRange = 100;
     [SerializeField] private float bulletDamage = 100;
     [SerializeField] private float bulletShotspeed = 1;
+    [SerializeField] private float bulletKnockback = 1;
     private float bulletTimer = 10f;
     
     void Update()
@@ -26,12 +27,13 @@ public class PlayerBulletScript : MonoBehaviour
     /// <param name="range">Range float</param>
     /// <param name="damage">Damage float</param>
     /// <param name="shotspeed">Shotspeed float</param>
-    public void SetBulletValues(float range, float damage, float shotspeed)
+    public void SetBulletValues(float range, float damage, float shotspeed, float knockback)
     {
         bulletTimer = range;
         bulletRange = range;
         bulletDamage = damage;
         bulletShotspeed = shotspeed;
+        bulletKnockback = knockback;
     }
 
     private void PrintBulletStats()
@@ -40,16 +42,16 @@ public class PlayerBulletScript : MonoBehaviour
         Debug.Log("Bullet Damage: " + bulletDamage);
         Debug.Log("Bullet Shotspeed: " + bulletShotspeed);
     }
-}
-/**
-void OnTriggerEnter2D(Collider2D collider)
+
+    void OnTriggerEnter2D(Collider2D collider)
     {
         if (collider.gameObject.name != "Player")
         {
-            healthScript health = collider.gameObject.GetComponent<healthScript>();
-            if (health != null)
+            IOnHit onHit = collider.gameObject.GetComponent<IOnHit>();
+            if (onHit != null)
             {
-                health.OnHealthChange(-bulletDamage);
+                onHit.OnHealthChange(-bulletDamage);
+                onHit.OnKnockback(bulletKnockback, HandleDirectionOfImpact(collider.gameObject.transform.position));
                 Destroy(gameObject);
             }
             if (collider.gameObject.tag == "Wall")
@@ -58,4 +60,14 @@ void OnTriggerEnter2D(Collider2D collider)
             }
         }
     }
+
+    private Vector2 HandleDirectionOfImpact(Vector2 enemy)
+    {
+        Vector2 direction = enemy - (Vector2)transform.position;
+        direction.Normalize();
+        return direction;
+    }
+}
+/**
+
 **/

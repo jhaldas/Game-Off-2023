@@ -246,7 +246,7 @@ public class PlayerWeaponScript : MonoBehaviour
         {
             GameObject temp = Instantiate(playerBulletPrefab, transform.position, quaternionPlayerToMouse * Quaternion.Euler(0,0,0 + HandleWeaponSpread(PlayerWeaponDictionary.Weapons.Pistol)));
             PlayerBulletScript tempBulletScript = temp.GetComponent<PlayerBulletScript>();
-            tempBulletScript.SetBulletValues(weaponValues[(int)PlayerWeaponDictionary.Weapons.Pistol][weaponRangeElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.Pistol][weaponDamageElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.Pistol][weaponShotspeedElement]);
+            tempBulletScript.SetBulletValues(weaponValues[(int)PlayerWeaponDictionary.Weapons.Pistol][weaponRangeElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.Pistol][weaponDamageElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.Pistol][weaponShotspeedElement],weaponValues[(int)PlayerWeaponDictionary.Weapons.Pistol][weaponKnockbackElement]);
         };
         swordFire = () => // Sword (might change how range and offset work)
         {
@@ -257,7 +257,7 @@ public class PlayerWeaponScript : MonoBehaviour
         {
             GameObject temp = Instantiate(playerBulletPrefab, transform.position, quaternionPlayerToMouse * Quaternion.Euler(0,0,0 + HandleWeaponSpread(PlayerWeaponDictionary.Weapons.SMG)));
             PlayerBulletScript tempBulletScript = temp.GetComponent<PlayerBulletScript>();
-            tempBulletScript.SetBulletValues(weaponValues[(int)PlayerWeaponDictionary.Weapons.SMG][weaponRangeElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.SMG][weaponDamageElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.SMG][weaponShotspeedElement]);
+            tempBulletScript.SetBulletValues(weaponValues[(int)PlayerWeaponDictionary.Weapons.SMG][weaponRangeElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.SMG][weaponDamageElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.SMG][weaponShotspeedElement],weaponValues[(int)PlayerWeaponDictionary.Weapons.SMG][weaponKnockbackElement]);
         };
         shotgunFire = () => // Shotgun (need to add spread values and potential bullet count)
         {
@@ -266,14 +266,14 @@ public class PlayerWeaponScript : MonoBehaviour
             {
                 temp[i] = Instantiate(playerShotgunPelletPrefab, transform.position, quaternionPlayerToMouse * Quaternion.Euler(0,0,0 + HandleWeaponSpread(PlayerWeaponDictionary.Weapons.Shotgun)));
                 PlayerBulletScript tempBulletScript = temp[i].GetComponent<PlayerBulletScript>();
-                tempBulletScript.SetBulletValues(weaponValues[(int)PlayerWeaponDictionary.Weapons.Shotgun][weaponRangeElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.Shotgun][weaponDamageElement], HandleVaryingShotspeed(PlayerWeaponDictionary.Weapons.Shotgun,3));
+                tempBulletScript.SetBulletValues(weaponValues[(int)PlayerWeaponDictionary.Weapons.Shotgun][weaponRangeElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.Shotgun][weaponDamageElement], HandleVaryingShotspeed(PlayerWeaponDictionary.Weapons.Shotgun,3),weaponValues[(int)PlayerWeaponDictionary.Weapons.Shotgun][weaponKnockbackElement]);
             }
         };
         rifleFire = () => // Rifle
         {
             GameObject temp = Instantiate(playerBulletPrefab, transform.position, quaternionPlayerToMouse * Quaternion.Euler(0,0,0 + HandleWeaponSpread(PlayerWeaponDictionary.Weapons.Rifle)));
             PlayerBulletScript tempBulletScript = temp.GetComponent<PlayerBulletScript>();
-            tempBulletScript.SetBulletValues(weaponValues[(int)PlayerWeaponDictionary.Weapons.Rifle][weaponRangeElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.Rifle][weaponDamageElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.Rifle][weaponShotspeedElement]);
+            tempBulletScript.SetBulletValues(weaponValues[(int)PlayerWeaponDictionary.Weapons.Rifle][weaponRangeElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.Rifle][weaponDamageElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.Rifle][weaponShotspeedElement],weaponValues[(int)PlayerWeaponDictionary.Weapons.Rifle][weaponKnockbackElement]);
         };
         grenadeLauncherFire = () => // Grenade Launcher
         {

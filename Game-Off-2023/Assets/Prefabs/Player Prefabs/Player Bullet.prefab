@@ -163,4 +163,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletRange: 1
   bulletDamage: 100
-  bulletShotSpeed: 5
+  bulletShotspeed: 1
+  bulletKnockback: 20
