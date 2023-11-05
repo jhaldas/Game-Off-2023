@@ -104,6 +104,8 @@ GameObject:
   - component: {fileID: 2265129922011260048}
   - component: {fileID: 5102603957279433680}
   - component: {fileID: 5364657481102772276}
+  - component: {fileID: 2718084688330057606}
+  - component: {fileID: 7648944136673208334}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -206,13 +208,13 @@ MonoBehaviour:
   m_ActionEvents:
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11500000, guid: 74b6b0e14a71b144e81dbb5d87b2c79c, type: 3}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
-        m_Mode: 1
+      - m_Target: {fileID: 7648944136673208334}
+        m_TargetAssemblyTypeName: PlayerMovementScript, Assembly-CSharp
+        m_MethodName: OnMovePlayer
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -396,6 +398,7 @@ MonoBehaviour:
   playerBulletPrefab: {fileID: 3225830422970295609, guid: 0e22d18f5149be54aab34a0e2767a5b3, type: 3}
   playerGrenadePrefab: {fileID: 7197686456965964187, guid: b1d17dd390c487845844ceeef5c90d86, type: 3}
   playerSlashPrefab: {fileID: 816757991826184599, guid: e1441bcd26f98ef4b9c9faa00a7539fc, type: 3}
+  playerShotgunPelletPrefab: {fileID: 3950216396927634622, guid: 8d253ab8bf5e9c149a6a2a0429f9d821, type: 3}
   weaponReloadTimers:
   - 0
   - 0
@@ -404,3 +407,46 @@ MonoBehaviour:
   - 0
   - 0
   weaponHasFired: 000000000000
+--- !u!50 &2718084688330057606
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7202480225997296045}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 10
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
+--- !u!114 &7648944136673208334
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7202480225997296045}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74b6b0e14a71b144e81dbb5d87b2c79c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerSpeed: 200
+  playerDrag: 10
+  playerMaxSpeed: 5
+  playerRigidBody: {fileID: 2718084688330057606}

@@ -21,12 +21,12 @@ public class PlayerWeaponDictionary
     const int weaponValueElementLength = 6; // Change value when adding another stat to weapon values.
     // Weapon values will go with the following order reload speed, damage, shotspeed, knockback, spread, range.
     //                                  Reload Speed(Sec)   Damage          Shotspeed       Knockback       Spread      Range(Sec)
-    private float[] pistolValues =      {1                  ,2              ,3              ,4              ,1          ,1              };
+    private float[] pistolValues =      {1                  ,2              ,3              ,4              ,1          ,3              };
     private float[] swordValues =       {1                  ,2              ,3              ,4              ,1          ,3              }; // Sword range is the distance from player.
-    private float[] sMGValues =         {.3f                ,45             ,1              ,4              ,1          ,.5f            };
-    private float[] shotgunValues =     {1                  ,2              ,3              ,4              ,25         ,100            };
-    private float[] rifleValues =       {1                  ,2              ,3              ,4              ,1          ,100            };
-    private float[] grenadeValues =     {1                  ,2              ,3              ,4              ,1          ,100            };
+    private float[] sMGValues =         {.3f                ,45             ,1              ,4              ,1          ,3              };
+    private float[] shotgunValues =     {1                  ,2              ,10             ,4              ,25         ,3              };
+    private float[] rifleValues =       {1                  ,2              ,3              ,4              ,1          ,3              };
+    private float[] grenadeValues =     {1                  ,2              ,3              ,4              ,1          ,3              };
 
     public PlayerWeaponDictionary()
     {

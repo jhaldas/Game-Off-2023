@@ -1,18 +1,136 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerMovementScript : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    //public static PlayerMovementScript nstance;
+    private Vector2 playerInputMovementDirection = Vector2.zero;
+    [SerializeField] private float playerSpeed = 5f;
+    [SerializeField] private float playerDrag = 10f;
+    [SerializeField] private float playerMaxSpeed = 5f;
+    [SerializeField] private Rigidbody2D playerRigidBody;
+
+
+    private void Awake()
     {
+        
+    }
+    
+    void Update()
+    {
+        UpdatePlayerMove();
+    }
+
+    /// <summary>
+    /// Takes player input from actions and converts it to a Vector2 direction.
+    /// </summary>
+    public void OnMovePlayer(InputAction.CallbackContext context)
+    {
+        if(context.action.phase == InputActionPhase.Started || context.action.phase == InputActionPhase.Performed)
+        {
+            playerInputMovementDirection = context.action.ReadValue<Vector2>(); // Updates player input direction while buttons are being pressed.
+        }
+        if(context.action.phase == InputActionPhase.Canceled)
+        {
+            playerInputMovementDirection = Vector2.zero; // Makes sure player input is set to zero when not holding a direction.
+        }
         
     }
 
-    // Update is called once per frame
-    void Update()
+    /// <summary>
+    /// Handles the rigidbody movement of the player for the update function.
+    /// </summary>
+    private void UpdatePlayerMove()
     {
-        
+        if(playerInputMovementDirection != Vector2.zero)
+        {
+            if (!(playerRigidBody.velocity.magnitude >= playerMaxSpeed))
+            {
+                playerRigidBody.velocity += playerInputMovementDirection * playerSpeed * Time.deltaTime;
+            }
+            else 
+            {
+                playerRigidBody.velocity = playerRigidBody.velocity;
+            }
+        }
+
     }
+
+    /// <summary>
+    /// Function for other classes to call to change move speed by adding a value.
+    /// </summary>
+    /// <param name="speed">Amount of speed to add to the player.</param>
+    public void OnChangePlayerSpeed(float speed)
+    {
+        playerSpeed += speed;
+    }
+
+    /// <summary>
+    /// Get player move speed for other functions.
+    /// </summary>
+    /// <returns>Player Speed.</returns>
+    public float ReturnMoveSpeed()
+    {
+        return playerSpeed;
+    }
+
+    /// <summary>
+    /// This function will be used to handle setting the drag..
+    /// </summary>
+    /// <param name="drag">Value to set the drag.</param>
+    public void OnSetPlayerDrag(float drag) // Used for when player is on different tiles.
+    {
+        playerRigidBody.drag = drag; // default is 10
+    }
+
+    /// <summary>
+    /// Changes the maximum speed of the player
+    /// </summary>
+    /// <param name="newMaxSpeed">New Player Maximum Speed</param>
+    public void SetPlayerMaxSpeed(float newMaxSpeed) 
+    {
+        playerMaxSpeed = newMaxSpeed; 
+    }
+
+    /// <summary>
+    /// Increases or decreases max speed by given amount
+    /// </summary>
+    /// <param name="amount"></param>
+    public void ChangeSpeedByAmount(float amount) 
+    {
+        playerSpeed += amount;
+        playerMaxSpeed += amount;
+    }
+
+    /// <summary>
+    /// Returns the max speed of the player
+    /// </summary>
+    /// <returns>Players Current Max Speed</returns>
+    public float GetPlayerMaxSpeed()
+    {
+        return playerMaxSpeed;
+    }
+
+    /// <summary>
+    /// Gets Player Drag
+    /// </summary>
+    /// <returns>Player Drag</returns>
+    public float GetPlayerDrag() 
+    {
+        return playerDrag;
+    }
+
 }
+
+/**
+if(Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
+**/

@@ -11,7 +11,7 @@ public class PlayerWeaponScript : MonoBehaviour
     private PlayerWeaponDictionary playerWeapons = new PlayerWeaponDictionary();
     private PlayerWeaponDictionary.Weapons playerCurrentWeapon = PlayerWeaponDictionary.Weapons.Pistol;
     private Action pistolFire, swordFire, sMGFire, shotgunFire, rifleFire, grenadeLauncherFire;
-    public GameObject playerBulletPrefab, playerGrenadePrefab, playerSlashPrefab;
+    public GameObject playerBulletPrefab, playerGrenadePrefab, playerSlashPrefab, playerShotgunPelletPrefab;
     private Quaternion quaternionPlayerToMouse;
     private float playerToMouseAngle;
 
@@ -264,9 +264,9 @@ public class PlayerWeaponScript : MonoBehaviour
             GameObject[] temp = new GameObject[9];
             for (int i = 0; i < 9; i++)
             {
-                temp[i] = Instantiate(playerBulletPrefab, transform.position, quaternionPlayerToMouse * Quaternion.Euler(0,0,0 + HandleWeaponSpread(PlayerWeaponDictionary.Weapons.Shotgun)));
+                temp[i] = Instantiate(playerShotgunPelletPrefab, transform.position, quaternionPlayerToMouse * Quaternion.Euler(0,0,0 + HandleWeaponSpread(PlayerWeaponDictionary.Weapons.Shotgun)));
                 PlayerBulletScript tempBulletScript = temp[i].GetComponent<PlayerBulletScript>();
-                tempBulletScript.SetBulletValues(weaponValues[(int)PlayerWeaponDictionary.Weapons.Shotgun][weaponRangeElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.Shotgun][weaponDamageElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.Shotgun][weaponShotspeedElement]);
+                tempBulletScript.SetBulletValues(weaponValues[(int)PlayerWeaponDictionary.Weapons.Shotgun][weaponRangeElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.Shotgun][weaponDamageElement], HandleVaryingShotspeed(PlayerWeaponDictionary.Weapons.Shotgun,3));
             }
         };
         rifleFire = () => // Rifle
@@ -343,6 +343,11 @@ public class PlayerWeaponScript : MonoBehaviour
     private float HandleWeaponSpread(PlayerWeaponDictionary.Weapons weapon)
     {
         return UnityEngine.Random.Range(-weaponValues[(int)weapon][weaponSpreadElement],weaponValues[(int)weapon][weaponSpreadElement]);
+    }
+
+    private float HandleVaryingShotspeed(PlayerWeaponDictionary.Weapons weapon, float varyingAmount)
+    {
+        return UnityEngine.Random.Range(weaponValues[(int)weapon][weaponShotspeedElement]-varyingAmount,weaponValues[(int)weapon][weaponShotspeedElement]);
     }
 }
 
