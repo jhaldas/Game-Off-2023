@@ -8,23 +8,37 @@ public class PlayerWeaponScript : MonoBehaviour
     
     private Vector2 playerMousePosition, mousePositionWorld, playerToMouseDirection;
     private bool playerFiring = false;
-    private bool playerHasFired = false;
     private PlayerWeaponDictionary playerWeapons = new PlayerWeaponDictionary();
     private PlayerWeaponDictionary.Weapons playerCurrentWeapon = PlayerWeaponDictionary.Weapons.Pistol;
     private Action pistolFire, swordFire, sMGFire, shotgunFire, rifleFire, grenadeLauncherFire;
-    public GameObject playerBulletPrefab, playerGrenadePrefab;
+    public GameObject playerBulletPrefab, playerGrenadePrefab, playerSlashPrefab;
     private Quaternion quaternionPlayerToMouse;
-    private float playerToMouseAngle, pistolReloadSpeed, swordReloadSpeed, sMGReloadSpeed, shotgunReloadSpeed, rifleReloadSpeed, grenadeLauncherReloadSpeed;
+    private float playerToMouseAngle;
+
+    // Weapon constants
+    const int weaponValueElementLength          = 6; // Change value when adding another stat to weapon values.
+    const int weaponReloadElement               = 0;
+    const int weaponDamageElement               = 1;
+    const int weaponShotspeedElement            = 2;
+    const int weaponKnockbackElement            = 3;
+    const int weaponSpreadElement               = 4;
+    const int weaponRangeElement                = 5;
+
+    [SerializeField] private float[] weaponReloadTimers = new float[weaponValueElementLength]; // Be careful adding weapon values because the editor might freak out.
+    private float[][] weaponValues = new float[Enum.GetValues(typeof(PlayerWeaponDictionary.Weapons)).Length][]; // Cannot be serialized on unity
+    [SerializeField] private bool[] weaponHasFired = {false, false, false, false, false, false};
 
     void Start()
     {
         InitializeWeaponLambdas();
+        InitializeWeaponValues();
     }
 
     void Update()
     {
-        HandleMouseToWorld();
+        MouseToWorldUpdate();
         HandlePlayerShoot();
+        WeaponReloadUpdate();
     }
 
     /// <summary>
@@ -86,6 +100,7 @@ public class PlayerWeaponScript : MonoBehaviour
         {
             if(!(playerCurrentWeapon == weapon))
             {
+                HandleWeaponValueUpdate(weapon);
                 playerCurrentWeapon = weapon;
                 HandleWeaponSpriteSwitch(playerCurrentWeapon);
                 Debug.Log("Weapon " + playerCurrentWeapon.ToString() + " Equipped!");
@@ -105,7 +120,7 @@ public class PlayerWeaponScript : MonoBehaviour
     {
         if(playerFiring)
         {
-            if(!playerHasFired)
+            if(!weaponHasFired[(int)playerCurrentWeapon])
             {
                 HandleWeaponShoot(playerCurrentWeapon);
             }
@@ -136,34 +151,64 @@ public class PlayerWeaponScript : MonoBehaviour
         switch(weapon)
         {
             case PlayerWeaponDictionary.Weapons.Pistol: // Pistol
-                FromPlayerToMouseQuaternion();
-                pistolFire.Invoke();
-                HandleWeaponShootingAnimation(weapon);
+                if(!weaponHasFired[(int)weapon])
+                {
+                    weaponHasFired[(int)weapon] = true;
+                    FromPlayerToMouseQuaternion();
+                    pistolFire.Invoke();
+                    HandleWeaponShootingAnimation(weapon);
+                    weaponReloadTimers[(int)weapon] = weaponValues[(int)weapon][weaponReloadElement];
+                }
                 break;
             case PlayerWeaponDictionary.Weapons.Sword: // Sword
-                FromPlayerToMouseQuaternion();
-                swordFire.Invoke();
-                HandleWeaponShootingAnimation(weapon);
+                if(!weaponHasFired[(int)weapon])
+                {
+                    weaponHasFired[(int)weapon] = true;
+                    FromPlayerToMouseQuaternion();
+                    swordFire.Invoke();
+                    HandleWeaponShootingAnimation(weapon);
+                    weaponReloadTimers[(int)weapon] = weaponValues[(int)weapon][weaponReloadElement];
+                }
                 break;
             case PlayerWeaponDictionary.Weapons.SMG: // SMG
-                FromPlayerToMouseQuaternion();
-                sMGFire.Invoke();
-                HandleWeaponShootingAnimation(weapon);
+                if(!weaponHasFired[(int)weapon])
+                {
+                    weaponHasFired[(int)weapon] = true;
+                    FromPlayerToMouseQuaternion();
+                    sMGFire.Invoke();
+                    HandleWeaponShootingAnimation(weapon);
+                    weaponReloadTimers[(int)weapon] = weaponValues[(int)weapon][weaponReloadElement];
+                }
                 break;
             case PlayerWeaponDictionary.Weapons.Shotgun: // Shotgun
-                FromPlayerToMouseQuaternion();
-                shotgunFire.Invoke();
-                HandleWeaponShootingAnimation(weapon);
+                if(!weaponHasFired[(int)weapon])
+                {
+                    weaponHasFired[(int)weapon] = true;
+                    FromPlayerToMouseQuaternion();
+                    shotgunFire.Invoke();
+                    HandleWeaponShootingAnimation(weapon);
+                    weaponReloadTimers[(int)weapon] = weaponValues[(int)weapon][weaponReloadElement];
+                }
                 break;
             case PlayerWeaponDictionary.Weapons.Rifle: // Rifle
-                FromPlayerToMouseQuaternion();
-                rifleFire.Invoke();
-                HandleWeaponShootingAnimation(weapon);
+                if(!weaponHasFired[(int)weapon])
+                {
+                    weaponHasFired[(int)weapon] = true;
+                    FromPlayerToMouseQuaternion();
+                    rifleFire.Invoke();
+                    HandleWeaponShootingAnimation(weapon);
+                    weaponReloadTimers[(int)weapon] = weaponValues[(int)weapon][weaponReloadElement];
+                }
                 break;
             case PlayerWeaponDictionary.Weapons.GrenadeLauncher: // Grenade Launcher
-                FromPlayerToMouseQuaternion();
-                grenadeLauncherFire.Invoke();
-                HandleWeaponShootingAnimation(weapon);
+                if(!weaponHasFired[(int)weapon])
+                {
+                    weaponHasFired[(int)weapon] = true;
+                    FromPlayerToMouseQuaternion();
+                    grenadeLauncherFire.Invoke();
+                    HandleWeaponShootingAnimation(weapon);
+                    weaponReloadTimers[(int)weapon] = weaponValues[(int)weapon][weaponReloadElement];
+                }
                 break;
         }
     }
@@ -187,31 +232,52 @@ public class PlayerWeaponScript : MonoBehaviour
         }
     }
 
-    private void InitializeWeaponLambdas()
+    private void InitializeWeaponValues()
     {
-        pistolFire = () =>
+        foreach(PlayerWeaponDictionary.Weapons weapon in Enum.GetValues(typeof(PlayerWeaponDictionary.Weapons)))
         {
-            Instantiate(playerBulletPrefab, transform.position, quaternionPlayerToMouse);
+            HandleWeaponValueUpdate(weapon);
+        }
+    }
+
+    private void InitializeWeaponLambdas() // Need to add weapon noises
+    {
+        pistolFire = () => // Pistol
+        {
+            GameObject temp = Instantiate(playerBulletPrefab, transform.position, quaternionPlayerToMouse * Quaternion.Euler(0,0,0 + HandleWeaponSpread(PlayerWeaponDictionary.Weapons.Pistol)));
+            PlayerBulletScript tempBulletScript = temp.GetComponent<PlayerBulletScript>();
+            tempBulletScript.SetBulletValues(weaponValues[(int)PlayerWeaponDictionary.Weapons.Pistol][weaponRangeElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.Pistol][weaponDamageElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.Pistol][weaponShotspeedElement]);
         };
-        swordFire = () =>
+        swordFire = () => // Sword (might change how range and offset work)
         {
-            Instantiate(playerBulletPrefab, transform.position, Quaternion.Euler(0,0,0));
+            GameObject temp = Instantiate(playerSlashPrefab, transform.position + (new Vector3(playerToMouseDirection.x,playerToMouseDirection.y,0) * 3), quaternionPlayerToMouse);
+            temp.transform.localScale = new Vector2(weaponValues[(int)PlayerWeaponDictionary.Weapons.Sword][weaponRangeElement]/2,weaponValues[(int)PlayerWeaponDictionary.Weapons.Sword][weaponRangeElement]*2);
         };
-        sMGFire = () =>
+        sMGFire = () => // SMG
         {
-            Instantiate(playerBulletPrefab, transform.position, Quaternion.Euler(0,0,0));
+            GameObject temp = Instantiate(playerBulletPrefab, transform.position, quaternionPlayerToMouse * Quaternion.Euler(0,0,0 + HandleWeaponSpread(PlayerWeaponDictionary.Weapons.SMG)));
+            PlayerBulletScript tempBulletScript = temp.GetComponent<PlayerBulletScript>();
+            tempBulletScript.SetBulletValues(weaponValues[(int)PlayerWeaponDictionary.Weapons.SMG][weaponRangeElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.SMG][weaponDamageElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.SMG][weaponShotspeedElement]);
         };
-        shotgunFire = () =>
+        shotgunFire = () => // Shotgun (need to add spread values and potential bullet count)
         {
-            Instantiate(playerBulletPrefab, transform.position, Quaternion.Euler(0,0,0));
+            GameObject[] temp = new GameObject[9];
+            for (int i = 0; i < 9; i++)
+            {
+                temp[i] = Instantiate(playerBulletPrefab, transform.position, quaternionPlayerToMouse * Quaternion.Euler(0,0,0 + HandleWeaponSpread(PlayerWeaponDictionary.Weapons.Shotgun)));
+                PlayerBulletScript tempBulletScript = temp[i].GetComponent<PlayerBulletScript>();
+                tempBulletScript.SetBulletValues(weaponValues[(int)PlayerWeaponDictionary.Weapons.Shotgun][weaponRangeElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.Shotgun][weaponDamageElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.Shotgun][weaponShotspeedElement]);
+            }
         };
-        rifleFire = () =>
+        rifleFire = () => // Rifle
         {
-            Instantiate(playerBulletPrefab, transform.position, Quaternion.Euler(0,0,0));
+            GameObject temp = Instantiate(playerBulletPrefab, transform.position, quaternionPlayerToMouse * Quaternion.Euler(0,0,0 + HandleWeaponSpread(PlayerWeaponDictionary.Weapons.Rifle)));
+            PlayerBulletScript tempBulletScript = temp.GetComponent<PlayerBulletScript>();
+            tempBulletScript.SetBulletValues(weaponValues[(int)PlayerWeaponDictionary.Weapons.Rifle][weaponRangeElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.Rifle][weaponDamageElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.Rifle][weaponShotspeedElement]);
         };
-        grenadeLauncherFire = () =>
+        grenadeLauncherFire = () => // Grenade Launcher
         {
-            Instantiate(playerBulletPrefab, transform.position, Quaternion.Euler(0,0,0));
+            Instantiate(playerGrenadePrefab, transform.position, quaternionPlayerToMouse);
         };
     }
 
@@ -220,7 +286,7 @@ public class PlayerWeaponScript : MonoBehaviour
         quaternionPlayerToMouse = Quaternion.Euler(0, 0, playerToMouseAngle);
     }
 
-    private void HandleMouseToWorld()
+    private void MouseToWorldUpdate()
     {
         playerMousePosition = Mouse.current.position.ReadValue();
         mousePositionWorld = Camera.main.ScreenToWorldPoint(playerMousePosition);
@@ -228,7 +294,56 @@ public class PlayerWeaponScript : MonoBehaviour
         playerToMouseAngle = Mathf.Atan2(playerToMouseDirection.y, playerToMouseDirection.x) * Mathf.Rad2Deg;
     }
 
-    
+    /// <summary>
+    /// This function will be the main function that will be called when anything is changed.
+    /// </summary>
+    /// <param name="weapon">Weapon that needs to be updated.</param>
+    public void HandleWeaponValueUpdate(PlayerWeaponDictionary.Weapons weapon)
+    {
+       weaponValues[(int)weapon] = playerWeapons.GetWeaponValues(weapon);
+    }
+
+    /// <summary>
+    /// Global function to add a float value to a specific weapon value.
+    /// </summary>
+    /// <param name="weapon">One of the weapons in the dictionary.</param>
+    /// <param name="weaponValueElement">0 = Reload Speed | 1 = Damage | 2 = Shotspeed | 3 = Knockback | 4 = Spread | 5 = Range</param>
+    /// <param name="value">Float value to add</param>
+    public void AddToWeaponValues(PlayerWeaponDictionary.Weapons weapon, int weaponValueElement, float value)
+    {
+        playerWeapons.AddWeaponValue(weapon, weaponValueElement, value);
+    }
+
+    /// <summary>
+    /// Global function to multiply a float value to a specific weapon value.
+    /// </summary>
+    /// <param name="weapon">One of the weapons in the dictionary.</param>
+    /// <param name="weaponValueElement">0 = Reload Speed | 1 = Damage | 2 = Shotspeed | 3 = Knockback | 4 = Spread | 5 = Range</param>
+    /// <param name="value">Float value to add</param>
+    public void MultiplyToWeaponValues(PlayerWeaponDictionary.Weapons weapon, int weaponValueElement, float value)
+    {
+        playerWeapons.AddWeaponValue(weapon, weaponValueElement, value);
+    }
+
+    private void WeaponReloadUpdate()
+    {
+        for(int i = 0; i < weaponValueElementLength; i++)
+        {
+            if(weaponReloadTimers[i] > 0)
+            {
+                weaponReloadTimers[i] -= Time.deltaTime;
+            }
+            else if(weaponReloadTimers[i] <= 0 && weaponHasFired[i])
+            {
+                weaponHasFired[i] = false;
+            }
+        }
+    }
+
+    private float HandleWeaponSpread(PlayerWeaponDictionary.Weapons weapon)
+    {
+        return UnityEngine.Random.Range(-weaponValues[(int)weapon][weaponSpreadElement],weaponValues[(int)weapon][weaponSpreadElement]);
+    }
 }
 
 /**

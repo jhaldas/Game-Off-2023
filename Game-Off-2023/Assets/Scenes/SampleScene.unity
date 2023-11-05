@@ -123,17 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!114 &1170967545 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5364657481102772276, guid: 235a730b494033b4cbb7ef1b59aa58d8, type: 3}
-  m_PrefabInstance: {fileID: 2434029236013707176}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 02422e27c4822dc4abb2b553e2c3007a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1241017436
 GameObject:
   m_ObjectHideFlags: 0
@@ -226,38 +215,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 5102603957279433680, guid: 235a730b494033b4cbb7ef1b59aa58d8, type: 3}
-      propertyPath: m_ActionEvents.Array.data[2].m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5102603957279433680, guid: 235a730b494033b4cbb7ef1b59aa58d8, type: 3}
-      propertyPath: m_ActionEvents.Array.data[2].m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5102603957279433680, guid: 235a730b494033b4cbb7ef1b59aa58d8, type: 3}
-      propertyPath: m_ActionEvents.Array.data[2].m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 1170967545}
-    - target: {fileID: 5102603957279433680, guid: 235a730b494033b4cbb7ef1b59aa58d8, type: 3}
-      propertyPath: m_ActionEvents.Array.data[2].m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 5102603957279433680, guid: 235a730b494033b4cbb7ef1b59aa58d8, type: 3}
-      propertyPath: m_ActionEvents.Array.data[2].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnPlayerFire
-      objectReference: {fileID: 0}
-    - target: {fileID: 5102603957279433680, guid: 235a730b494033b4cbb7ef1b59aa58d8, type: 3}
-      propertyPath: m_ActionEvents.Array.data[2].m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: PlayerWeaponScript, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 5102603957279433680, guid: 235a730b494033b4cbb7ef1b59aa58d8, type: 3}
-      propertyPath: m_ActionEvents.Array.data[2].m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
-    - target: {fileID: 5364657481102772276, guid: 235a730b494033b4cbb7ef1b59aa58d8, type: 3}
-      propertyPath: playerGrenadePrefab
-      value: 
-      objectReference: {fileID: 1381869953017469709, guid: 2a230eb7a35512f45820b5ba5a06427f, type: 3}
     - target: {fileID: 7202480225997296045, guid: 235a730b494033b4cbb7ef1b59aa58d8, type: 3}
       propertyPath: m_Name
       value: Player

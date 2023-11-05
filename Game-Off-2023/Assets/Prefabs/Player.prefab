@@ -225,7 +225,19 @@ MonoBehaviour:
     m_ActionId: c7573883-cb45-4cb4-b739-1ce814d8b4d9
     m_ActionName: Player/Look[/Mouse/delta]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5364657481102772276}
+        m_TargetAssemblyTypeName: PlayerWeaponScript, Assembly-CSharp
+        m_MethodName: OnPlayerFire
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 4e71f5ba-c5fa-4c3c-80f9-ad4cc4d6b7e8
     m_ActionName: Player/Fire[/Mouse/leftButton]
   - m_PersistentCalls:
@@ -382,4 +394,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerBulletPrefab: {fileID: 3225830422970295609, guid: 0e22d18f5149be54aab34a0e2767a5b3, type: 3}
-  playerGrenadePrefab: {fileID: 0}
+  playerGrenadePrefab: {fileID: 7197686456965964187, guid: b1d17dd390c487845844ceeef5c90d86, type: 3}
+  playerSlashPrefab: {fileID: 816757991826184599, guid: e1441bcd26f98ef4b9c9faa00a7539fc, type: 3}
+  weaponReloadTimers:
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  weaponHasFired: 000000000000

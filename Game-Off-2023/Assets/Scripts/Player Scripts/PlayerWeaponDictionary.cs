@@ -5,19 +5,28 @@ using UnityEngine;
 public class PlayerWeaponDictionary
 {
     
-    public enum Weapons {Pistol, Sword, SMG, Shotgun, Rifle, GrenadeLauncher};
+    public enum Weapons 
+    {
+        Pistol              = 0, 
+        Sword               = 1, 
+        SMG                 = 2, 
+        Shotgun             = 3, 
+        Rifle               = 4, 
+        GrenadeLauncher     = 5
+    };
 
     private Dictionary<Weapons, float[]> weaponDictionary = new Dictionary<Weapons, float[]>();
     private Dictionary<Weapons, bool> hasWeaponDictionary = new Dictionary<Weapons, bool>();
 
+    const int weaponValueElementLength = 6; // Change value when adding another stat to weapon values.
     // Weapon values will go with the following order reload speed, damage, shotspeed, knockback, spread, range.
-    //                                  Reload Speed    Damage          Shotspeed       Knockback       Spread      Range
-    private float[] pistolValues =      {1              ,2              ,3              ,4              ,1          ,100            };
-    private float[] swordValues =       {1              ,2              ,3              ,4              ,1          ,100            };
-    private float[] sMGValues =         {1              ,2              ,3              ,4              ,1          ,100            };
-    private float[] shotgunValues =     {1              ,2              ,3              ,4              ,1          ,100            };
-    private float[] rifleValues =       {1              ,2              ,3              ,4              ,1          ,100            };
-    private float[] grenadeValues =     {1              ,2              ,3              ,4              ,1          ,100            };
+    //                                  Reload Speed(Sec)   Damage          Shotspeed       Knockback       Spread      Range(Sec)
+    private float[] pistolValues =      {1                  ,2              ,3              ,4              ,1          ,1              };
+    private float[] swordValues =       {1                  ,2              ,3              ,4              ,1          ,3              }; // Sword range is the distance from player.
+    private float[] sMGValues =         {.3f                ,45             ,1              ,4              ,1          ,.5f            };
+    private float[] shotgunValues =     {1                  ,2              ,3              ,4              ,25         ,100            };
+    private float[] rifleValues =       {1                  ,2              ,3              ,4              ,1          ,100            };
+    private float[] grenadeValues =     {1                  ,2              ,3              ,4              ,1          ,100            };
 
     public PlayerWeaponDictionary()
     {
@@ -32,10 +41,10 @@ public class PlayerWeaponDictionary
         // Has Weapon Dictionary
         hasWeaponDictionary.Add(Weapons.Pistol, true);
         hasWeaponDictionary.Add(Weapons.Sword, true);
-        hasWeaponDictionary.Add(Weapons.SMG, false);
-        hasWeaponDictionary.Add(Weapons.Shotgun, false);
-        hasWeaponDictionary.Add(Weapons.Rifle, false);
-        hasWeaponDictionary.Add(Weapons.GrenadeLauncher, false);
+        hasWeaponDictionary.Add(Weapons.SMG, true);
+        hasWeaponDictionary.Add(Weapons.Shotgun, true);
+        hasWeaponDictionary.Add(Weapons.Rifle, true);
+        hasWeaponDictionary.Add(Weapons.GrenadeLauncher, true);
     }
 
     /// <summary>
@@ -71,6 +80,48 @@ public class PlayerWeaponDictionary
         else
         {
             throw new KeyNotFoundException("Weapon not found: " + weapon);
+        }
+    }
+
+    /// <summary>
+    /// Add a float value to the weapon element.
+    /// </summary>
+    /// <param name="weapon">One of the weapons in the dictionary.</param>
+    /// <param name="weaponValueElement">0 = Reload Speed | 1 = Damage | 2 = Shotspeed | 3 = Knockback | 4 = Spread | 5 = Range</param>
+    /// <param name="value">Float value to add</param>
+    public void AddWeaponValue(Weapons weapon, int weaponValueElement, float value)
+    {
+        if(weaponValueElement >= weaponValueElementLength)
+        {
+            Debug.Log("Incorrect Weapon Element Value.");
+        }
+        else
+        {
+            float[] tempWeaponValue;
+            tempWeaponValue = weaponDictionary[weapon];
+            tempWeaponValue[weaponValueElement] = tempWeaponValue[weaponValueElement] + value;
+            weaponDictionary[weapon] = tempWeaponValue;
+        }
+    }
+
+    /// <summary>
+    /// Multiply a float value to the weapon element.
+    /// </summary>
+    /// <param name="weapon">One of the weapons in the dictionary.</param>
+    /// <param name="weaponValueElement">0 = Reload Speed | 1 = Damage | 2 = Shotspeed | 3 = Knockback | 4 = Spread | 5 = Range</param>
+    /// <param name="value">Float value to multiply</param>
+    public void MultipleWeaponValue(Weapons weapon, int weaponValueElement, float value)
+    {
+        if(weaponValueElement >= weaponValueElementLength)
+        {
+            Debug.Log("Incorrect Weapon Element Value.");
+        }
+        else
+        {
+            float[] tempWeaponValue;
+            tempWeaponValue = weaponDictionary[weapon];
+            tempWeaponValue[weaponValueElement] = tempWeaponValue[weaponValueElement] * value;
+            weaponDictionary[weapon] = tempWeaponValue;
         }
     }
 
