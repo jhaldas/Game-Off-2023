@@ -28,6 +28,8 @@ public class PlayerWeaponScript : MonoBehaviour
     private float[][] weaponValues = new float[Enum.GetValues(typeof(PlayerWeaponDictionary.Weapons)).Length][]; // Cannot be serialized on unity
     [SerializeField] private bool[] weaponHasFired = {false, false, false, false, false, false};
 
+    [SerializeField] private GameObject weaponHolder; // Parent game object for all weapon sprites
+
     void Start()
     {
         InitializeWeaponLambdas();
@@ -39,6 +41,7 @@ public class PlayerWeaponScript : MonoBehaviour
         MouseToWorldUpdate();
         HandlePlayerShoot();
         WeaponReloadUpdate();
+        HandleWeaponRotation();
     }
 
     /// <summary>
@@ -348,6 +351,16 @@ public class PlayerWeaponScript : MonoBehaviour
     private float HandleVaryingShotspeed(PlayerWeaponDictionary.Weapons weapon, float varyingAmount)
     {
         return UnityEngine.Random.Range(weaponValues[(int)weapon][weaponShotspeedElement]-varyingAmount,weaponValues[(int)weapon][weaponShotspeedElement]);
+    }
+
+    private void HandleWeaponRotation() 
+    {
+        weaponHolder.transform.rotation = Quaternion.Euler(0, 0, playerToMouseAngle);
+    }
+
+    private void ShowCorrectWeapon()
+    {
+
     }
 }
 
