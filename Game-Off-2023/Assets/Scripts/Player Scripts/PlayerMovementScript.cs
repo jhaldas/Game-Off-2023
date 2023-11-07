@@ -10,12 +10,11 @@ public class PlayerMovementScript : MonoBehaviour
     [SerializeField] private float playerSpeed = 5f;
     [SerializeField] private float playerDrag = 10f;
     [SerializeField] private float playerMaxSpeed = 5f;
-    [SerializeField] private Rigidbody2D playerRigidBody;
+    [SerializeField] private Rigidbody2D playerRigidbody;
     [SerializeField] private GameObject playerSprite;
     [SerializeField] private GameObject weaponHolder;
     [SerializeField] private Animator _playerAnimator;
     private bool facingRight = true;
-
 
 
     private void Awake()
@@ -51,13 +50,13 @@ public class PlayerMovementScript : MonoBehaviour
     {
         if(playerInputMovementDirection != Vector2.zero)
         {
-            if (!(playerRigidBody.velocity.magnitude >= playerMaxSpeed))
+            if (!(playerRigidbody.velocity.magnitude >= playerMaxSpeed))
             {
-                playerRigidBody.velocity += playerInputMovementDirection * playerSpeed * Time.deltaTime;
+                playerRigidbody.velocity += playerInputMovementDirection * playerSpeed * Time.deltaTime;
             }
             else 
             {
-                playerRigidBody.velocity = playerRigidBody.velocity;
+                playerRigidbody.velocity = playerRigidbody.velocity;
             }
         }
 
@@ -87,7 +86,7 @@ public class PlayerMovementScript : MonoBehaviour
     /// <param name="drag">Value to set the drag.</param>
     public void OnSetPlayerDrag(float drag) // Used for when player is on different tiles.
     {
-        playerRigidBody.drag = drag; // default is 10
+        playerRigidbody.drag = drag; // default is 10
     }
 
     /// <summary>
