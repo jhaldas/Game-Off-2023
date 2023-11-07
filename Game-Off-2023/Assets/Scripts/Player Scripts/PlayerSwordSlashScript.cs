@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class PlayerSwordSlashScript : MonoBehaviour
 {
-    [SerializeField] private float slashRange = 100;
+    [SerializeField] private float slashRange = 40;
     [SerializeField] private float slashDamage = 100;
     [SerializeField] private float slashShotspeed = 1;
-    private float slashTimer = 10f;
+    [SerializeField] private float slashKnockback = 1;
+    private float slashTimer = 1f;
     
     void Update()
     {
@@ -25,12 +26,13 @@ public class PlayerSwordSlashScript : MonoBehaviour
     /// <param name="range">Range float</param>
     /// <param name="damage">Damage float</param>
     /// <param name="shotspeed">Shotspeed float</param>
-    public void SetSlashValues(float range, float damage, float shotspeed)
+    public void SetSlashValues(float range, float damage, float shotspeed, float knockback)
     {
         slashTimer = range;
         slashRange = range;
         slashDamage = damage;
         slashShotspeed = shotspeed;
+        slashKnockback = knockback;
     }
 
     private void PrintslashStats()
@@ -38,5 +40,25 @@ public class PlayerSwordSlashScript : MonoBehaviour
         Debug.Log("Slash Range: " + slashRange);
         Debug.Log("Slash Damage: " + slashDamage);
         Debug.Log("Slash Shotspeed: " + slashShotspeed);
+    }
+
+    void OnTriggerEnter2D(Collider2D collider)
+    {
+        if (collider.gameObject.name != "Player")
+        {
+            IOnHit onHit = collider.gameObject.GetComponent<IOnHit>();
+            if (onHit != null)
+            {
+                onHit.OnHealthChange(-slashDamage);
+                onHit.OnKnockback(slashKnockback, HandleDirectionOfImpact(collider.gameObject.transform.position));
+            }
+        }
+    }
+
+    private Vector2 HandleDirectionOfImpact(Vector2 enemy)
+    {
+        Vector2 direction = enemy - (Vector2)transform.position;
+        direction.Normalize();
+        return direction;
     }
 }
