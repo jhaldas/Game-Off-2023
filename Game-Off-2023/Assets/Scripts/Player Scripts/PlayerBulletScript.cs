@@ -51,7 +51,7 @@ public class PlayerBulletScript : MonoBehaviour
             if (onHit != null)
             {
                 onHit.OnHealthChange(-bulletDamage);
-                onHit.OnKnockback(bulletKnockback, HandleDirectionOfImpact(collider.gameObject.transform.position));
+                onHit.OnKnockback(bulletKnockback, transform.right);
                 Destroy(gameObject);
             }
             if (collider.gameObject.tag == "Wall")
@@ -59,13 +59,6 @@ public class PlayerBulletScript : MonoBehaviour
                 Destroy(gameObject);
             }
         }
-    }
-
-    private Vector2 HandleDirectionOfImpact(Vector2 enemy)
-    {
-        Vector2 direction = enemy - (Vector2)transform.position;
-        direction.Normalize();
-        return direction;
     }
 }
 /**

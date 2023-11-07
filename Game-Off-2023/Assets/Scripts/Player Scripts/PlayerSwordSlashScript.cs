@@ -50,15 +50,9 @@ public class PlayerSwordSlashScript : MonoBehaviour
             if (onHit != null)
             {
                 onHit.OnHealthChange(-slashDamage);
-                onHit.OnKnockback(slashKnockback, HandleDirectionOfImpact(collider.gameObject.transform.position));
+                onHit.OnKnockback(slashKnockback, transform.right);
             }
         }
     }
 
-    private Vector2 HandleDirectionOfImpact(Vector2 enemy)
-    {
-        Vector2 direction = enemy - (Vector2)transform.position;
-        direction.Normalize();
-        return direction;
-    }
 }
