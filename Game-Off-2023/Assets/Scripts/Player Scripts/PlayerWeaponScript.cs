@@ -30,6 +30,8 @@ public class PlayerWeaponScript : MonoBehaviour
 
     [SerializeField] private GameObject weaponHolder; // Parent game object for all weapon sprites
 
+    [SerializeField] private GameObject[] weaponSprites = new GameObject[6];
+
     void Start()
     {
         InitializeWeaponLambdas();

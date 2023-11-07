@@ -899,6 +899,13 @@ MonoBehaviour:
   - 0
   weaponHasFired: 000000000000
   weaponHolder: {fileID: 6345406190427708149}
+  weaponSprites:
+  - {fileID: 8420684721645847177}
+  - {fileID: 4162613551779413955}
+  - {fileID: 2119430062858347728}
+  - {fileID: 3001407689419355089}
+  - {fileID: 6338980060305047628}
+  - {fileID: 2653925332847473077}
 --- !u!50 &2718084688330057606
 Rigidbody2D:
   serializedVersion: 4
