@@ -8,6 +8,7 @@ public class PlayerWeaponScript : MonoBehaviour
     
     private Vector2 playerMousePosition, mousePositionWorld, playerToMouseDirection;
     private bool playerFiring = false;
+    private bool facingRight = true;
     private PlayerWeaponDictionary playerWeapons = new PlayerWeaponDictionary();
     private PlayerWeaponDictionary.Weapons playerCurrentWeapon = PlayerWeaponDictionary.Weapons.Pistol;
     private Action pistolFire, swordFire, sMGFire, shotgunFire, rifleFire, grenadeLauncherFire;
@@ -31,6 +32,10 @@ public class PlayerWeaponScript : MonoBehaviour
 
     [SerializeField] private GameObject weaponHolder; // Parent game object for all weapon sprites
 
+    [SerializeField] private GameObject playerSprite;
+
+    [SerializeField] private Animator _playerAnimator;
+
     [SerializeField] private GameObject[] weaponSprites = new GameObject[6];
 
     void Start()
@@ -45,6 +50,8 @@ public class PlayerWeaponScript : MonoBehaviour
         HandlePlayerShoot();
         WeaponReloadUpdate();
         HandleWeaponRotation();
+        HandlePlayerFlip();
+        HandleAnimator();
     }
 
     /// <summary>
@@ -378,10 +385,40 @@ public class PlayerWeaponScript : MonoBehaviour
         weaponHolder.transform.rotation = Quaternion.Euler(0, 0, playerToMouseAngle);
     }
 
-    private void ShowCorrectWeapon()
+    public void HandlePlayerFlip()
     {
-
+        if (playerToMouseDirection.x > 0 && !facingRight)
+        {
+            facingRight = true;
+            Flip();
+        }
+        else if (playerToMouseDirection.x < 0 && facingRight)
+        {
+            facingRight = false;
+            Flip();
+        }
     }
+
+    public void HandleAnimator() 
+    {
+        if (playerToMouseDirection.y > 0.2)
+        {
+            _playerAnimator.SetBool("FacingFront", false);
+            playerSprite.GetComponent<SpriteRenderer>().sortingOrder = 6;
+        }
+        else
+        {
+            _playerAnimator.SetBool("FacingFront", true);
+            playerSprite.GetComponent<SpriteRenderer>().sortingOrder = 4;
+        }
+    }
+
+    public void Flip()
+    {
+        weaponHolder.transform.localScale = new Vector3(-weaponHolder.transform.localScale.x, -weaponHolder.transform.localScale.y, weaponHolder.transform.localScale.z);
+        playerSprite.transform.localScale = new Vector3(-playerSprite.transform.localScale.x, playerSprite.transform.localScale.y, playerSprite.transform.localScale.z);
+    }
+
 }
 
 /**

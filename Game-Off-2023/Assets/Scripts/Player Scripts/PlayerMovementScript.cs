@@ -25,6 +25,7 @@ public class PlayerMovementScript : MonoBehaviour
     void Update()
     {
         UpdatePlayerMove();
+        HandleAnimator();
     }
 
     /// <summary>
@@ -128,7 +129,7 @@ public class PlayerMovementScript : MonoBehaviour
 
     public void HandleAnimator()
     {
-        if (playerInputMovementDirection.magnitude > 0)
+        if (playerInputMovementDirection.magnitude > 0.1)
         {
             _playerAnimator.SetBool("IsMoving", true);
         }
@@ -136,27 +137,9 @@ public class PlayerMovementScript : MonoBehaviour
         {
             _playerAnimator.SetBool("isMoving", false);
         }
-        if (playerInputMovementDirection.y > 0)
-        {
-            _playerAnimator.SetBool("FacingFront", false);
-        }
-        else
-        {
-            _playerAnimator.SetBool("FacingFront", true);
-        }
     }
 
-    public void HandlePlayerFlip() 
-    {
-        if (playerInputMovementDirection.x > 0)
-        {
-            facingRight = true;
-        }
-        else
-        {
-            facingRight = false;
-        }
-    }
+
 
 }
 
