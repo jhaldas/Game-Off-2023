@@ -99,9 +99,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ae42b0e02902324ea8bc147c4e70bf1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyHealth: 100
+  enemyHealth: 10
   enemyMaxHealth: 100
   enemyRigidbody: {fileID: 987664580587090546}
+  scaleDropAmount: 10
+  scalePrefab: {fileID: 4418835969308571486, guid: acebea7dd07e74c46856899a6387bb37, type: 3}
 --- !u!50 &987664580587090546
 Rigidbody2D:
   serializedVersion: 4

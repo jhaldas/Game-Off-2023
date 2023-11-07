@@ -18,15 +18,15 @@ public class PlayerWeaponDictionary
     private Dictionary<Weapons, float[]> weaponDictionary = new Dictionary<Weapons, float[]>();
     private Dictionary<Weapons, bool> hasWeaponDictionary = new Dictionary<Weapons, bool>();
 
-    const int weaponValueElementLength = 6; // Change value when adding another stat to weapon values.
+    const int weaponValueElementLength = 7; // Change value when adding another stat to weapon values.
     // Weapon values will go with the following order reload speed, damage, shotspeed, knockback, spread, range.
-    //                                  Reload Speed(Sec)   Damage          Shotspeed       Knockback       Spread      Range(Sec)
-    private float[] pistolValues =      {1                  ,2              ,3              ,50              ,1          ,9              };
-    private float[] swordValues =       {1                  ,2              ,3              ,50              ,1          ,9              }; // Sword range is the distance from player.
-    private float[] sMGValues =         {.3f                ,45             ,1              ,50              ,1          ,9              };
-    private float[] shotgunValues =     {1                  ,2              ,10             ,50              ,25         ,9              };
-    private float[] rifleValues =       {1                  ,2              ,3              ,50              ,1          ,9              };
-    private float[] grenadeValues =     {1                  ,2              ,3              ,50              ,1          ,9              };
+    //                                  Reload Speed(Sec)   Damage          Shotspeed       Knockback       Spread      Range(Sec)          Projectile Size
+    private float[] pistolValues =      {1                  ,2              ,3              ,50              ,1          ,9                 ,.1f                 };
+    private float[] swordValues =       {1                  ,2              ,3              ,50              ,1          ,9                 ,.1f                 };
+    private float[] sMGValues =         {.3f                ,45             ,1              ,50              ,1          ,9                 ,.1f                 };
+    private float[] shotgunValues =     {1                  ,2              ,10             ,50              ,25         ,9                 ,.4f                 };
+    private float[] rifleValues =       {1                  ,2              ,3              ,50              ,1          ,9                 ,.1f                 };
+    private float[] grenadeValues =     {1                  ,2              ,3              ,50              ,1          ,9                 ,.1f                 };
 
     public PlayerWeaponDictionary()
     {
