@@ -135,19 +135,30 @@ public class PlayerWeaponScript : MonoBehaviour
 
     private void HandleWeaponSpriteSwitch(PlayerWeaponDictionary.Weapons weapon) /// For when switching weapons.
     {
-        switch(weapon)
+        foreach (GameObject s in weaponSprites) 
+        {
+            s.SetActive(false);
+        }
+
+        switch (weapon)
         {
             case PlayerWeaponDictionary.Weapons.Pistol: // Pistol
+                weaponSprites[0].SetActive(true);
                 break;
             case PlayerWeaponDictionary.Weapons.Sword: // Sword
+                weaponSprites[1].SetActive(true);
                 break;
             case PlayerWeaponDictionary.Weapons.SMG: // SMG
+                weaponSprites[2].SetActive(true);
                 break;
             case PlayerWeaponDictionary.Weapons.Shotgun: // Shotgun
+                weaponSprites[3].SetActive(true);
                 break;
             case PlayerWeaponDictionary.Weapons.Rifle: // Rifle
+                weaponSprites[4].SetActive(true);
                 break;
             case PlayerWeaponDictionary.Weapons.GrenadeLauncher: // Grenade Launcher
+                weaponSprites[5].SetActive(true);
                 break;
         }
     }

@@ -11,6 +11,10 @@ public class PlayerMovementScript : MonoBehaviour
     [SerializeField] private float playerDrag = 10f;
     [SerializeField] private float playerMaxSpeed = 5f;
     [SerializeField] private Rigidbody2D playerRigidbody;
+    [SerializeField] private GameObject playerSprite;
+    [SerializeField] private GameObject weaponHolder;
+    [SerializeField] private Animator _playerAnimator;
+    private bool facingRight = true;
 
 
     private void Awake()
@@ -120,6 +124,38 @@ public class PlayerMovementScript : MonoBehaviour
     public float GetPlayerDrag() 
     {
         return playerDrag;
+    }
+
+    public void HandleAnimator()
+    {
+        if (playerInputMovementDirection.magnitude > 0)
+        {
+            _playerAnimator.SetBool("IsMoving", true);
+        }
+        else 
+        {
+            _playerAnimator.SetBool("isMoving", false);
+        }
+        if (playerInputMovementDirection.y > 0)
+        {
+            _playerAnimator.SetBool("FacingFront", false);
+        }
+        else
+        {
+            _playerAnimator.SetBool("FacingFront", true);
+        }
+    }
+
+    public void HandlePlayerFlip() 
+    {
+        if (playerInputMovementDirection.x > 0)
+        {
+            facingRight = true;
+        }
+        else
+        {
+            facingRight = false;
+        }
     }
 
 }
