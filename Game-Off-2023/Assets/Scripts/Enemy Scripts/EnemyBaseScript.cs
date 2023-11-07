@@ -7,7 +7,9 @@ public class EnemyBaseScript : MonoBehaviour, IOnHit
 
     [SerializeField] private float enemyHealth = 100;
     [SerializeField] private float enemyMaxHealth = 100;
-    public Rigidbody2D enemyRigidbody;
+    [SerializeField] private Rigidbody2D enemyRigidbody;
+    [SerializeField] private float scaleDropAmount = 10;
+    public GameObject scalePrefab;
 
     void Start()
     {
@@ -33,7 +35,16 @@ public class EnemyBaseScript : MonoBehaviour, IOnHit
     {
         if(enemyHealth<=0)
         {
-            Destroy(gameObject);
+            OnEnemyDeath();
         }
+    }
+
+    private void OnEnemyDeath()
+    {
+        for(int i = 0; i < scaleDropAmount; i++)
+        {
+            Instantiate(scalePrefab,transform.position,transform.rotation);
+        }
+        Destroy(gameObject);
     }
 }

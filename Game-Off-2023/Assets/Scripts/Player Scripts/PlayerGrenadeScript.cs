@@ -55,4 +55,6 @@ public class PlayerGrenadeScript : MonoBehaviour
         Debug.Log("Grenade Damage: " + grenadeDamage);
         Debug.Log("Grenade Shotspeed: " + grenadeShotspeed);
     }
+
+    
 }
