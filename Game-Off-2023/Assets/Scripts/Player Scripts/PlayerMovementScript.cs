@@ -135,7 +135,7 @@ public class PlayerMovementScript : MonoBehaviour
         }
         else 
         {
-            _playerAnimator.SetBool("isMoving", false);
+            _playerAnimator.SetBool("IsMoving", false);
         }
     }
 
