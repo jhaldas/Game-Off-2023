@@ -387,7 +387,7 @@ public class PlayerWeaponScript : MonoBehaviour
 
     public void HandlePlayerFlip()
     {
-        if (playerToMouseDirection.x > 0 && !facingRight)
+        if (playerToMouseDirection.x >= 0 && !facingRight)
         {
             facingRight = true;
             Flip();
@@ -415,8 +415,8 @@ public class PlayerWeaponScript : MonoBehaviour
 
     public void Flip()
     {
-        weaponHolder.transform.localScale = new Vector3(-weaponHolder.transform.localScale.x, -weaponHolder.transform.localScale.y, weaponHolder.transform.localScale.z);
-        playerSprite.transform.localScale = new Vector3(-playerSprite.transform.localScale.x, playerSprite.transform.localScale.y, playerSprite.transform.localScale.z);
+        playerSprite.GetComponent<SpriteRenderer>().flipX = !playerSprite.GetComponent<SpriteRenderer>().flipX;
+        weaponHolder.transform.localScale = new Vector3(weaponHolder.transform.localScale.x, -weaponHolder.transform.localScale.y, weaponHolder.transform.localScale.z);
     }
 
 }
