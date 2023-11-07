@@ -101,6 +101,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scaleMinForce: 0
   scaleMaxForce: 10
+  scaleRadius: 10
+  scaleSpeed: 5
+  scaleValue: 10
   scaleRigidbody: {fileID: -5977857472334892459}
 --- !u!50 &-5977857472334892459
 Rigidbody2D:
