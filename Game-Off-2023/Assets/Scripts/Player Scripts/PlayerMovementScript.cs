@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovementScript : MonoBehaviour
 {
-    //public static PlayerMovementScript nstance;
+    
     private Vector2 playerInputMovementDirection = Vector2.zero;
     [SerializeField] private float playerSpeed = 5f;
     [SerializeField] private float playerDrag = 10f;

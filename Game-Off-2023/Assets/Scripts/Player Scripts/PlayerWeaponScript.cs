@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class PlayerWeaponScript : MonoBehaviour
 {
@@ -9,6 +11,7 @@ public class PlayerWeaponScript : MonoBehaviour
     private Vector2 playerMousePosition, mousePositionWorld, playerToMouseDirection;
     private bool playerFiring = false;
     private bool facingRight = true;
+    [SerializeField] private bool isPaused = false;
     private PlayerWeaponDictionary playerWeapons = new PlayerWeaponDictionary();
     private PlayerWeaponDictionary.Weapons playerCurrentWeapon = PlayerWeaponDictionary.Weapons.Pistol;
     private Action pistolFire, swordFire, sMGFire, shotgunFire, rifleFire, grenadeLauncherFire;
@@ -29,14 +32,11 @@ public class PlayerWeaponScript : MonoBehaviour
     [SerializeField] private float[] weaponReloadTimers = new float[weaponValueElementLength]; // Be careful adding weapon values because the editor might freak out.
     private float[][] weaponValues = new float[Enum.GetValues(typeof(PlayerWeaponDictionary.Weapons)).Length][]; // Cannot be serialized on unity
     [SerializeField] private bool[] weaponHasFired = {false, false, false, false, false, false};
-
     [SerializeField] private GameObject weaponHolder; // Parent game object for all weapon sprites
-
     [SerializeField] private GameObject playerSprite;
-
     [SerializeField] private Animator _playerAnimator;
-
     [SerializeField] private GameObject[] weaponSprites = new GameObject[6];
+    public GameObject[] playerWeaponOverlays = new GameObject[Enum.GetValues(typeof(PlayerWeaponDictionary.Weapons)).Length];
 
     void Start()
     {
@@ -116,11 +116,11 @@ public class PlayerWeaponScript : MonoBehaviour
                 HandleWeaponValueUpdate(weapon);
                 playerCurrentWeapon = weapon;
                 HandleWeaponSpriteSwitch(playerCurrentWeapon);
-                Debug.Log("Weapon " + playerCurrentWeapon.ToString() + " Equipped!");
+                //Debug.Log("Weapon " + playerCurrentWeapon.ToString() + " Equipped!");
             }
             else
             {
-                Debug.Log("Weapon Equipped Already!");
+                //Debug.Log("Weapon Equipped Already!");
             }
         }
         else
@@ -150,22 +150,28 @@ public class PlayerWeaponScript : MonoBehaviour
         switch (weapon)
         {
             case PlayerWeaponDictionary.Weapons.Pistol: // Pistol
-                weaponSprites[0].SetActive(true);
+                weaponSprites[(int)weapon].SetActive(true);
+                OnWeaponSwitchUI(weapon);
                 break;
             case PlayerWeaponDictionary.Weapons.Sword: // Sword
-                weaponSprites[1].SetActive(true);
+                weaponSprites[(int)weapon].SetActive(true);
+                OnWeaponSwitchUI(weapon);
                 break;
             case PlayerWeaponDictionary.Weapons.SMG: // SMG
-                weaponSprites[2].SetActive(true);
+                weaponSprites[(int)weapon].SetActive(true);
+                OnWeaponSwitchUI(weapon);
                 break;
             case PlayerWeaponDictionary.Weapons.Shotgun: // Shotgun
-                weaponSprites[3].SetActive(true);
+                weaponSprites[(int)weapon].SetActive(true);
+                OnWeaponSwitchUI(weapon);
                 break;
             case PlayerWeaponDictionary.Weapons.Rifle: // Rifle
-                weaponSprites[4].SetActive(true);
+                weaponSprites[(int)weapon].SetActive(true);
+                OnWeaponSwitchUI(weapon);
                 break;
             case PlayerWeaponDictionary.Weapons.GrenadeLauncher: // Grenade Launcher
-                weaponSprites[5].SetActive(true);
+                weaponSprites[(int)weapon].SetActive(true);
+                OnWeaponSwitchUI(weapon);
                 break;
         }
     }
@@ -318,10 +324,13 @@ public class PlayerWeaponScript : MonoBehaviour
 
     private void MouseToWorldUpdate()
     {
-        playerMousePosition = Mouse.current.position.ReadValue();
-        mousePositionWorld = Camera.main.ScreenToWorldPoint(playerMousePosition);
-        playerToMouseDirection = (mousePositionWorld - new Vector2(transform.position.x,transform.position.y)).normalized;
-        playerToMouseAngle = Mathf.Atan2(playerToMouseDirection.y, playerToMouseDirection.x) * Mathf.Rad2Deg;
+        if(!isPaused)
+        {
+            playerMousePosition = Mouse.current.position.ReadValue();
+            mousePositionWorld = Camera.main.ScreenToWorldPoint(playerMousePosition);
+            playerToMouseDirection = (mousePositionWorld - new Vector2(transform.position.x,transform.position.y)).normalized;
+            playerToMouseAngle = Mathf.Atan2(playerToMouseDirection.y, playerToMouseDirection.x) * Mathf.Rad2Deg;
+        }
     }
 
     /// <summary>
@@ -417,6 +426,37 @@ public class PlayerWeaponScript : MonoBehaviour
     {
         weaponHolder.transform.localScale = new Vector3(-weaponHolder.transform.localScale.x, -weaponHolder.transform.localScale.y, weaponHolder.transform.localScale.z);
         playerSprite.transform.localScale = new Vector3(-playerSprite.transform.localScale.x, playerSprite.transform.localScale.y, playerSprite.transform.localScale.z);
+    }
+
+    public void OnPause(InputAction.CallbackContext context)
+    {
+        if(context.action.phase == InputActionPhase.Started)
+        {
+            if(isPaused)
+            {
+                isPaused = false;
+            }
+            else
+            {
+                isPaused = true;
+            }
+        }
+    }
+
+    private void OnWeaponSwitchUI(PlayerWeaponDictionary.Weapons weapon)
+    {
+        int numberOfWeapons = 6;
+        for(int i = 0; i < numberOfWeapons; i++)
+        {
+            if((int)weapon == i)
+            {
+                playerWeaponOverlays[i].SetActive(false);
+            }
+            else
+            {
+                playerWeaponOverlays[i].SetActive(true);
+            }
+        }
     }
 
 }
