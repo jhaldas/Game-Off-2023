@@ -9,6 +9,7 @@ public class EnemyBaseScript : MonoBehaviour, IOnHit
     [SerializeField] private float enemyMaxHealth = 100;
     [SerializeField] private Rigidbody2D enemyRigidbody;
     [SerializeField] private float scaleDropAmount = 10;
+    [SerializeField] private float xpDropAmount = 10;
     public GameObject scalePrefab;
 
     void Start()
@@ -35,6 +36,7 @@ public class EnemyBaseScript : MonoBehaviour, IOnHit
     {
         if(enemyHealth<=0)
         {
+            PlayerBaseScript.playerInstance.ChangePlayerXP(xpDropAmount, PlayerBaseScript.PlayerValueOptions.Add);
             OnEnemyDeath();
         }
     }
