@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class PlayerWeaponScript : MonoBehaviour
 {
-
+    
     private Vector2 playerMousePosition, mousePositionWorld, playerToMouseDirection;
     private bool playerFiring = false;
     private bool facingRight = true;
@@ -18,20 +18,21 @@ public class PlayerWeaponScript : MonoBehaviour
     public GameObject playerBulletPrefab, playerGrenadePrefab, playerSlashPrefab, playerShotgunPelletPrefab;
     private Quaternion quaternionPlayerToMouse;
     private float playerToMouseAngle;
+    [SerializeField] private GameObject[] weaponBarrelOrigins = new GameObject[6];
 
     // Weapon constants
-    const int weaponValueElementLength = 7; // Change value when adding another stat to weapon values.
-    const int weaponReloadElement = 0;
-    const int weaponDamageElement = 1;
-    const int weaponShotspeedElement = 2;
-    const int weaponKnockbackElement = 3;
-    const int weaponSpreadElement = 4;
-    const int weaponRangeElement = 5;
-    const int weaponProjectileSizeElement = 6;
+    const int weaponValueElementLength          = 7; // Change value when adding another stat to weapon values.
+    const int weaponReloadElement               = 0;
+    const int weaponDamageElement               = 1;
+    const int weaponShotspeedElement            = 2;
+    const int weaponKnockbackElement            = 3;
+    const int weaponSpreadElement               = 4;
+    const int weaponRangeElement                = 5;
+    const int weaponProjectileSizeElement       = 6;
 
     [SerializeField] private float[] weaponReloadTimers = new float[weaponValueElementLength]; // Be careful adding weapon values because the editor might freak out.
     private float[][] weaponValues = new float[Enum.GetValues(typeof(PlayerWeaponDictionary.Weapons)).Length][]; // Cannot be serialized on unity
-    [SerializeField] private bool[] weaponHasFired = { false, false, false, false, false, false };
+    [SerializeField] private bool[] weaponHasFired = {false, false, false, false, false, false};
     [SerializeField] private GameObject weaponHolder; // Parent game object for all weapon sprites
     [SerializeField] private GameObject playerSprite;
     [SerializeField] private Animator _playerAnimator;
@@ -49,8 +50,8 @@ public class PlayerWeaponScript : MonoBehaviour
         MouseToWorldUpdate();
         HandlePlayerShoot();
         WeaponReloadUpdate();
-        HandlePlayerFlip();
         HandleWeaponRotation();
+        HandlePlayerFlip();
         HandleAnimator();
     }
 
@@ -59,12 +60,12 @@ public class PlayerWeaponScript : MonoBehaviour
     /// </summary>
     public void OnPlayerFire(InputAction.CallbackContext context)
     {
-        if (context.action.phase == InputActionPhase.Started || context.action.phase == InputActionPhase.Performed)
+        if(context.action.phase == InputActionPhase.Started || context.action.phase == InputActionPhase.Performed)
         {
             playerFiring = true;
-
+            
         }
-        if (context.action.phase == InputActionPhase.Canceled)
+        if(context.action.phase == InputActionPhase.Canceled)
         {
             playerFiring = false;
         }
@@ -81,9 +82,9 @@ public class PlayerWeaponScript : MonoBehaviour
 
     public void OnWeaponSwitch(InputAction.CallbackContext context)
     {
-        if (context.action.phase == InputActionPhase.Started)
+        if(context.action.phase == InputActionPhase.Started)
         {
-            switch (context.control.name)
+            switch(context.control.name)
             {
                 case "1": // Pistol
                     HandleWeaponSwitch(PlayerWeaponDictionary.Weapons.Pistol);
@@ -109,9 +110,9 @@ public class PlayerWeaponScript : MonoBehaviour
 
     private void HandleWeaponSwitch(PlayerWeaponDictionary.Weapons weapon)
     {
-        if (playerWeapons.GetHasWeapon(weapon))
+        if(playerWeapons.GetHasWeapon(weapon))
         {
-            if (!(playerCurrentWeapon == weapon))
+            if(!(playerCurrentWeapon == weapon))
             {
                 HandleWeaponValueUpdate(weapon);
                 playerCurrentWeapon = weapon;
@@ -131,9 +132,9 @@ public class PlayerWeaponScript : MonoBehaviour
 
     private void HandlePlayerShoot()
     {
-        if (playerFiring)
+        if(playerFiring)
         {
-            if (!weaponHasFired[(int)playerCurrentWeapon])
+            if(!weaponHasFired[(int)playerCurrentWeapon])
             {
                 HandleWeaponShoot(playerCurrentWeapon);
             }
@@ -142,7 +143,7 @@ public class PlayerWeaponScript : MonoBehaviour
 
     private void HandleWeaponSpriteSwitch(PlayerWeaponDictionary.Weapons weapon) /// For when switching weapons.
     {
-        foreach (GameObject s in weaponSprites)
+        foreach (GameObject s in weaponSprites) 
         {
             s.SetActive(false);
         }
@@ -178,10 +179,10 @@ public class PlayerWeaponScript : MonoBehaviour
 
     private void HandleWeaponShoot(PlayerWeaponDictionary.Weapons weapon)
     {
-        switch (weapon)
+        switch(weapon)
         {
             case PlayerWeaponDictionary.Weapons.Pistol: // Pistol
-                if (!weaponHasFired[(int)weapon])
+                if(!weaponHasFired[(int)weapon])
                 {
                     weaponHasFired[(int)weapon] = true;
                     FromPlayerToMouseQuaternion();
@@ -191,7 +192,7 @@ public class PlayerWeaponScript : MonoBehaviour
                 }
                 break;
             case PlayerWeaponDictionary.Weapons.Sword: // Sword
-                if (!weaponHasFired[(int)weapon])
+                if(!weaponHasFired[(int)weapon])
                 {
                     weaponHasFired[(int)weapon] = true;
                     FromPlayerToMouseQuaternion();
@@ -201,7 +202,7 @@ public class PlayerWeaponScript : MonoBehaviour
                 }
                 break;
             case PlayerWeaponDictionary.Weapons.SMG: // SMG
-                if (!weaponHasFired[(int)weapon])
+                if(!weaponHasFired[(int)weapon])
                 {
                     weaponHasFired[(int)weapon] = true;
                     FromPlayerToMouseQuaternion();
@@ -211,7 +212,7 @@ public class PlayerWeaponScript : MonoBehaviour
                 }
                 break;
             case PlayerWeaponDictionary.Weapons.Shotgun: // Shotgun
-                if (!weaponHasFired[(int)weapon])
+                if(!weaponHasFired[(int)weapon])
                 {
                     weaponHasFired[(int)weapon] = true;
                     FromPlayerToMouseQuaternion();
@@ -221,7 +222,7 @@ public class PlayerWeaponScript : MonoBehaviour
                 }
                 break;
             case PlayerWeaponDictionary.Weapons.Rifle: // Rifle
-                if (!weaponHasFired[(int)weapon])
+                if(!weaponHasFired[(int)weapon])
                 {
                     weaponHasFired[(int)weapon] = true;
                     FromPlayerToMouseQuaternion();
@@ -231,7 +232,7 @@ public class PlayerWeaponScript : MonoBehaviour
                 }
                 break;
             case PlayerWeaponDictionary.Weapons.GrenadeLauncher: // Grenade Launcher
-                if (!weaponHasFired[(int)weapon])
+                if(!weaponHasFired[(int)weapon])
                 {
                     weaponHasFired[(int)weapon] = true;
                     FromPlayerToMouseQuaternion();
@@ -245,7 +246,7 @@ public class PlayerWeaponScript : MonoBehaviour
 
     private void HandleWeaponShootingAnimation(PlayerWeaponDictionary.Weapons weapon) /// For when shooting weapon.
     {
-        switch (weapon)
+        switch(weapon)
         {
             case PlayerWeaponDictionary.Weapons.Pistol: // Pistol
                 break;
@@ -264,7 +265,7 @@ public class PlayerWeaponScript : MonoBehaviour
 
     private void InitializeWeaponValues()
     {
-        foreach (PlayerWeaponDictionary.Weapons weapon in Enum.GetValues(typeof(PlayerWeaponDictionary.Weapons)))
+        foreach(PlayerWeaponDictionary.Weapons weapon in Enum.GetValues(typeof(PlayerWeaponDictionary.Weapons)))
         {
             HandleWeaponValueUpdate(weapon);
         }
@@ -274,46 +275,49 @@ public class PlayerWeaponScript : MonoBehaviour
     {
         pistolFire = () => // Pistol
         {
-            GameObject temp = Instantiate(playerBulletPrefab, transform.position, quaternionPlayerToMouse * Quaternion.Euler(0, 0, 0 + HandleWeaponSpread(PlayerWeaponDictionary.Weapons.Pistol)));
+            GameObject temp = Instantiate(playerBulletPrefab, weaponBarrelOrigins[0].transform.position, quaternionPlayerToMouse * Quaternion.Euler(0,0,0 + HandleWeaponSpread(PlayerWeaponDictionary.Weapons.Pistol)));
             PlayerBulletScript tempBulletScript = temp.GetComponent<PlayerBulletScript>();
-            temp.transform.localScale = new Vector2(weaponValues[(int)PlayerWeaponDictionary.Weapons.Pistol][weaponProjectileSizeElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.Pistol][weaponProjectileSizeElement]);
-            tempBulletScript.SetBulletValues(weaponValues[(int)PlayerWeaponDictionary.Weapons.Pistol][weaponRangeElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.Pistol][weaponDamageElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.Pistol][weaponShotspeedElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.Pistol][weaponKnockbackElement]);
+            temp.transform.localScale = new Vector2(weaponValues[(int)PlayerWeaponDictionary.Weapons.Pistol][weaponProjectileSizeElement],weaponValues[(int)PlayerWeaponDictionary.Weapons.Pistol][weaponProjectileSizeElement]);
+            tempBulletScript.SetBulletValues(weaponValues[(int)PlayerWeaponDictionary.Weapons.Pistol][weaponRangeElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.Pistol][weaponDamageElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.Pistol][weaponShotspeedElement],weaponValues[(int)PlayerWeaponDictionary.Weapons.Pistol][weaponKnockbackElement]);
+            ScreenShakeScript.screenShake.AddShake(.1f,weaponValues[(int)PlayerWeaponDictionary.Weapons.Pistol][weaponDamageElement] + weaponValues[(int)PlayerWeaponDictionary.Weapons.Pistol][weaponShotspeedElement]);
         };
         swordFire = () => // Sword (might change how range and offset work)
         {
-            GameObject temp = Instantiate(playerSlashPrefab, transform.position + (new Vector3(playerToMouseDirection.x, playerToMouseDirection.y, 0) * 3), quaternionPlayerToMouse);
+            GameObject temp = Instantiate(playerSlashPrefab, transform.position + (new Vector3(playerToMouseDirection.x,playerToMouseDirection.y,0) * 3), quaternionPlayerToMouse);
             PlayerSwordSlashScript tempSwordSlashScript = temp.GetComponent<PlayerSwordSlashScript>();
-            temp.transform.localScale = new Vector2(weaponValues[(int)PlayerWeaponDictionary.Weapons.Sword][weaponProjectileSizeElement] / 2, weaponValues[(int)PlayerWeaponDictionary.Weapons.Sword][weaponProjectileSizeElement] * 2);
-            tempSwordSlashScript.SetSlashValues(weaponValues[(int)PlayerWeaponDictionary.Weapons.Sword][weaponRangeElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.Sword][weaponDamageElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.Sword][weaponShotspeedElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.Sword][weaponKnockbackElement]);
+            temp.transform.localScale = new Vector2(weaponValues[(int)PlayerWeaponDictionary.Weapons.Sword][weaponProjectileSizeElement]/2,weaponValues[(int)PlayerWeaponDictionary.Weapons.Sword][weaponProjectileSizeElement]*2);
+            tempSwordSlashScript.SetSlashValues(weaponValues[(int)PlayerWeaponDictionary.Weapons.Sword][weaponRangeElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.Sword][weaponDamageElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.Sword][weaponShotspeedElement],weaponValues[(int)PlayerWeaponDictionary.Weapons.Sword][weaponKnockbackElement]);
         };
         sMGFire = () => // SMG
         {
-            GameObject temp = Instantiate(playerBulletPrefab, transform.position, quaternionPlayerToMouse * Quaternion.Euler(0, 0, 0 + HandleWeaponSpread(PlayerWeaponDictionary.Weapons.SMG)));
+            GameObject temp = Instantiate(playerBulletPrefab, weaponBarrelOrigins[2].transform.position, quaternionPlayerToMouse * Quaternion.Euler(0,0,0 + HandleWeaponSpread(PlayerWeaponDictionary.Weapons.SMG)));
             PlayerBulletScript tempBulletScript = temp.GetComponent<PlayerBulletScript>();
-            temp.transform.localScale = new Vector2(weaponValues[(int)PlayerWeaponDictionary.Weapons.SMG][weaponProjectileSizeElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.SMG][weaponProjectileSizeElement]);
-            tempBulletScript.SetBulletValues(weaponValues[(int)PlayerWeaponDictionary.Weapons.SMG][weaponRangeElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.SMG][weaponDamageElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.SMG][weaponShotspeedElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.SMG][weaponKnockbackElement]);
+            temp.transform.localScale = new Vector2(weaponValues[(int)PlayerWeaponDictionary.Weapons.SMG][weaponProjectileSizeElement],weaponValues[(int)PlayerWeaponDictionary.Weapons.SMG][weaponProjectileSizeElement]);
+            tempBulletScript.SetBulletValues(weaponValues[(int)PlayerWeaponDictionary.Weapons.SMG][weaponRangeElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.SMG][weaponDamageElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.SMG][weaponShotspeedElement],weaponValues[(int)PlayerWeaponDictionary.Weapons.SMG][weaponKnockbackElement]);
+            ScreenShakeScript.screenShake.AddShake(.1f,weaponValues[(int)PlayerWeaponDictionary.Weapons.SMG][weaponDamageElement] + weaponValues[(int)PlayerWeaponDictionary.Weapons.SMG][weaponShotspeedElement]);
         };
         shotgunFire = () => // Shotgun (need to add spread values and potential bullet count)
         {
             GameObject[] temp = new GameObject[9];
             for (int i = 0; i < 9; i++)
             {
-                temp[i] = Instantiate(playerShotgunPelletPrefab, transform.position, quaternionPlayerToMouse * Quaternion.Euler(0, 0, 0 + HandleWeaponSpread(PlayerWeaponDictionary.Weapons.Shotgun)));
+                temp[i] = Instantiate(playerShotgunPelletPrefab, weaponBarrelOrigins[3].transform.position, quaternionPlayerToMouse * Quaternion.Euler(0,0,0 + HandleWeaponSpread(PlayerWeaponDictionary.Weapons.Shotgun)));
                 PlayerBulletScript tempBulletScript = temp[i].GetComponent<PlayerBulletScript>();
-                temp[i].transform.localScale = new Vector2(weaponValues[(int)PlayerWeaponDictionary.Weapons.Shotgun][weaponProjectileSizeElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.Shotgun][weaponProjectileSizeElement] / 2);
-                tempBulletScript.SetBulletValues(weaponValues[(int)PlayerWeaponDictionary.Weapons.Shotgun][weaponRangeElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.Shotgun][weaponDamageElement], HandleVaryingShotspeed(PlayerWeaponDictionary.Weapons.Shotgun, 3), weaponValues[(int)PlayerWeaponDictionary.Weapons.Shotgun][weaponKnockbackElement]);
+                temp[i].transform.localScale = new Vector2(weaponValues[(int)PlayerWeaponDictionary.Weapons.Shotgun][weaponProjectileSizeElement],weaponValues[(int)PlayerWeaponDictionary.Weapons.Shotgun][weaponProjectileSizeElement]/2);
+                tempBulletScript.SetBulletValues(weaponValues[(int)PlayerWeaponDictionary.Weapons.Shotgun][weaponRangeElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.Shotgun][weaponDamageElement], HandleVaryingShotspeed(PlayerWeaponDictionary.Weapons.Shotgun,3),weaponValues[(int)PlayerWeaponDictionary.Weapons.Shotgun][weaponKnockbackElement]);
             }
+            ScreenShakeScript.screenShake.AddShake(.5f,weaponValues[(int)PlayerWeaponDictionary.Weapons.Shotgun][weaponDamageElement]*9 + weaponValues[(int)PlayerWeaponDictionary.Weapons.Shotgun][weaponShotspeedElement]);
         };
         rifleFire = () => // Rifle
         {
-            GameObject temp = Instantiate(playerBulletPrefab, transform.position, quaternionPlayerToMouse * Quaternion.Euler(0, 0, 0 + HandleWeaponSpread(PlayerWeaponDictionary.Weapons.Rifle)));
+            GameObject temp = Instantiate(playerBulletPrefab, weaponBarrelOrigins[4].transform.position, quaternionPlayerToMouse * Quaternion.Euler(0,0,0 + HandleWeaponSpread(PlayerWeaponDictionary.Weapons.Rifle)));
             PlayerBulletScript tempBulletScript = temp.GetComponent<PlayerBulletScript>();
-            temp.transform.localScale = new Vector2(weaponValues[(int)PlayerWeaponDictionary.Weapons.Rifle][weaponProjectileSizeElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.Rifle][weaponProjectileSizeElement]);
-            tempBulletScript.SetBulletValues(weaponValues[(int)PlayerWeaponDictionary.Weapons.Rifle][weaponRangeElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.Rifle][weaponDamageElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.Rifle][weaponShotspeedElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.Rifle][weaponKnockbackElement]);
+            temp.transform.localScale = new Vector2(weaponValues[(int)PlayerWeaponDictionary.Weapons.Rifle][weaponProjectileSizeElement],weaponValues[(int)PlayerWeaponDictionary.Weapons.Rifle][weaponProjectileSizeElement]);
+            tempBulletScript.SetBulletValues(weaponValues[(int)PlayerWeaponDictionary.Weapons.Rifle][weaponRangeElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.Rifle][weaponDamageElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.Rifle][weaponShotspeedElement],weaponValues[(int)PlayerWeaponDictionary.Weapons.Rifle][weaponKnockbackElement]);
         };
         grenadeLauncherFire = () => // Grenade Launcher
         {
-            Instantiate(playerGrenadePrefab, transform.position, quaternionPlayerToMouse);
+            Instantiate(playerGrenadePrefab, weaponBarrelOrigins[5].transform.position, quaternionPlayerToMouse);
         };
     }
 
@@ -324,11 +328,11 @@ public class PlayerWeaponScript : MonoBehaviour
 
     private void MouseToWorldUpdate()
     {
-        if (!isPaused)
+        if(!isPaused)
         {
             playerMousePosition = Mouse.current.position.ReadValue();
             mousePositionWorld = Camera.main.ScreenToWorldPoint(playerMousePosition);
-            playerToMouseDirection = (mousePositionWorld - new Vector2(transform.position.x, transform.position.y)).normalized;
+            playerToMouseDirection = (mousePositionWorld - new Vector2(transform.position.x,transform.position.y)).normalized;
             playerToMouseAngle = Mathf.Atan2(playerToMouseDirection.y, playerToMouseDirection.x) * Mathf.Rad2Deg;
         }
     }
@@ -339,7 +343,7 @@ public class PlayerWeaponScript : MonoBehaviour
     /// <param name="weapon">Weapon that needs to be updated.</param>
     public void HandleWeaponValueUpdate(PlayerWeaponDictionary.Weapons weapon)
     {
-        weaponValues[(int)weapon] = playerWeapons.GetWeaponValues(weapon);
+       weaponValues[(int)weapon] = playerWeapons.GetWeaponValues(weapon);
     }
 
     /// <summary>
@@ -366,13 +370,13 @@ public class PlayerWeaponScript : MonoBehaviour
 
     private void WeaponReloadUpdate()
     {
-        for (int i = 0; i < weaponReloadTimers.Length; i++)
+        for(int i = 0; i < weaponReloadTimers.Length; i++)
         {
-            if (weaponReloadTimers[i] > 0)
+            if(weaponReloadTimers[i] > 0)
             {
                 weaponReloadTimers[i] -= Time.deltaTime;
             }
-            else if (weaponReloadTimers[i] <= 0 && weaponHasFired[i])
+            else if(weaponReloadTimers[i] <= 0 && weaponHasFired[i])
             {
                 weaponHasFired[i] = false;
             }
@@ -381,22 +385,22 @@ public class PlayerWeaponScript : MonoBehaviour
 
     private float HandleWeaponSpread(PlayerWeaponDictionary.Weapons weapon)
     {
-        return UnityEngine.Random.Range(-weaponValues[(int)weapon][weaponSpreadElement], weaponValues[(int)weapon][weaponSpreadElement]);
+        return UnityEngine.Random.Range(-weaponValues[(int)weapon][weaponSpreadElement],weaponValues[(int)weapon][weaponSpreadElement]);
     }
 
     private float HandleVaryingShotspeed(PlayerWeaponDictionary.Weapons weapon, float varyingAmount)
     {
-        return UnityEngine.Random.Range(weaponValues[(int)weapon][weaponShotspeedElement] - varyingAmount, weaponValues[(int)weapon][weaponShotspeedElement]);
+        return UnityEngine.Random.Range(weaponValues[(int)weapon][weaponShotspeedElement]-varyingAmount,weaponValues[(int)weapon][weaponShotspeedElement]);
     }
 
-    private void HandleWeaponRotation()
+    private void HandleWeaponRotation() 
     {
         weaponHolder.transform.rotation = Quaternion.Euler(0, 0, playerToMouseAngle);
     }
 
     public void HandlePlayerFlip()
     {
-        if (playerToMouseDirection.x >= 0 && !facingRight)
+        if (playerToMouseDirection.x > 0 && !facingRight)
         {
             facingRight = true;
             Flip();
@@ -408,7 +412,7 @@ public class PlayerWeaponScript : MonoBehaviour
         }
     }
 
-    public void HandleAnimator()
+    public void HandleAnimator() 
     {
         if (playerToMouseDirection.y > 0.2)
         {
@@ -424,15 +428,15 @@ public class PlayerWeaponScript : MonoBehaviour
 
     public void Flip()
     {
-        playerSprite.transform.localScale = new Vector3(-playerSprite.transform.localScale.x, playerSprite.transform.localScale.y, playerSprite.transform.localScale.z);
         weaponHolder.transform.localScale = new Vector3(-weaponHolder.transform.localScale.x, -weaponHolder.transform.localScale.y, weaponHolder.transform.localScale.z);
+        playerSprite.transform.localScale = new Vector3(-playerSprite.transform.localScale.x, playerSprite.transform.localScale.y, playerSprite.transform.localScale.z);
     }
 
     public void OnPause(InputAction.CallbackContext context)
     {
-        if (context.action.phase == InputActionPhase.Started)
+        if(context.action.phase == InputActionPhase.Started)
         {
-            if (isPaused)
+            if(isPaused)
             {
                 isPaused = false;
             }
@@ -446,9 +450,9 @@ public class PlayerWeaponScript : MonoBehaviour
     private void OnWeaponSwitchUI(PlayerWeaponDictionary.Weapons weapon)
     {
         int numberOfWeapons = 6;
-        for (int i = 0; i < numberOfWeapons; i++)
+        for(int i = 0; i < numberOfWeapons; i++)
         {
-            if ((int)weapon == i)
+            if((int)weapon == i)
             {
                 playerWeaponOverlays[i].SetActive(false);
             }
@@ -457,11 +461,6 @@ public class PlayerWeaponScript : MonoBehaviour
                 playerWeaponOverlays[i].SetActive(true);
             }
         }
-    }
-
-    public PlayerWeaponDictionary GetPlayerWeapons()
-    {
-        return playerWeapons;
     }
 
 }
