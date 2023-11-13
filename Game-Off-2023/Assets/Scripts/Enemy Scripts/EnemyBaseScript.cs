@@ -29,7 +29,7 @@ public class EnemyBaseScript : MonoBehaviour, IOnHit
 
     public void OnKnockback(float knockback, Vector2 direction)
     {
-        enemyRigidbody.AddForce(direction * knockback, ForceMode2D.Impulse);
+        enemyRigidbody.AddForce(direction * knockback*1000, ForceMode2D.Impulse);
     }
 
     private void EnemyDeathUpdate()

@@ -18,6 +18,7 @@ public class PlayerWeaponScript : MonoBehaviour
     public GameObject playerBulletPrefab, playerGrenadePrefab, playerSlashPrefab, playerShotgunPelletPrefab;
     private Quaternion quaternionPlayerToMouse;
     private float playerToMouseAngle;
+    [SerializeField] private GameObject[] weaponBarrelOrigins = new GameObject[6];
 
     // Weapon constants
     const int weaponValueElementLength          = 7; // Change value when adding another stat to weapon values.
@@ -274,10 +275,11 @@ public class PlayerWeaponScript : MonoBehaviour
     {
         pistolFire = () => // Pistol
         {
-            GameObject temp = Instantiate(playerBulletPrefab, transform.position, quaternionPlayerToMouse * Quaternion.Euler(0,0,0 + HandleWeaponSpread(PlayerWeaponDictionary.Weapons.Pistol)));
+            GameObject temp = Instantiate(playerBulletPrefab, weaponBarrelOrigins[0].transform.position, quaternionPlayerToMouse * Quaternion.Euler(0,0,0 + HandleWeaponSpread(PlayerWeaponDictionary.Weapons.Pistol)));
             PlayerBulletScript tempBulletScript = temp.GetComponent<PlayerBulletScript>();
             temp.transform.localScale = new Vector2(weaponValues[(int)PlayerWeaponDictionary.Weapons.Pistol][weaponProjectileSizeElement],weaponValues[(int)PlayerWeaponDictionary.Weapons.Pistol][weaponProjectileSizeElement]);
             tempBulletScript.SetBulletValues(weaponValues[(int)PlayerWeaponDictionary.Weapons.Pistol][weaponRangeElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.Pistol][weaponDamageElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.Pistol][weaponShotspeedElement],weaponValues[(int)PlayerWeaponDictionary.Weapons.Pistol][weaponKnockbackElement]);
+            ScreenShakeScript.screenShake.AddShake(.1f,weaponValues[(int)PlayerWeaponDictionary.Weapons.Pistol][weaponDamageElement] + weaponValues[(int)PlayerWeaponDictionary.Weapons.Pistol][weaponShotspeedElement]);
         };
         swordFire = () => // Sword (might change how range and offset work)
         {
@@ -288,32 +290,34 @@ public class PlayerWeaponScript : MonoBehaviour
         };
         sMGFire = () => // SMG
         {
-            GameObject temp = Instantiate(playerBulletPrefab, transform.position, quaternionPlayerToMouse * Quaternion.Euler(0,0,0 + HandleWeaponSpread(PlayerWeaponDictionary.Weapons.SMG)));
+            GameObject temp = Instantiate(playerBulletPrefab, weaponBarrelOrigins[2].transform.position, quaternionPlayerToMouse * Quaternion.Euler(0,0,0 + HandleWeaponSpread(PlayerWeaponDictionary.Weapons.SMG)));
             PlayerBulletScript tempBulletScript = temp.GetComponent<PlayerBulletScript>();
             temp.transform.localScale = new Vector2(weaponValues[(int)PlayerWeaponDictionary.Weapons.SMG][weaponProjectileSizeElement],weaponValues[(int)PlayerWeaponDictionary.Weapons.SMG][weaponProjectileSizeElement]);
             tempBulletScript.SetBulletValues(weaponValues[(int)PlayerWeaponDictionary.Weapons.SMG][weaponRangeElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.SMG][weaponDamageElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.SMG][weaponShotspeedElement],weaponValues[(int)PlayerWeaponDictionary.Weapons.SMG][weaponKnockbackElement]);
+            ScreenShakeScript.screenShake.AddShake(.1f,weaponValues[(int)PlayerWeaponDictionary.Weapons.SMG][weaponDamageElement] + weaponValues[(int)PlayerWeaponDictionary.Weapons.SMG][weaponShotspeedElement]);
         };
         shotgunFire = () => // Shotgun (need to add spread values and potential bullet count)
         {
             GameObject[] temp = new GameObject[9];
             for (int i = 0; i < 9; i++)
             {
-                temp[i] = Instantiate(playerShotgunPelletPrefab, transform.position, quaternionPlayerToMouse * Quaternion.Euler(0,0,0 + HandleWeaponSpread(PlayerWeaponDictionary.Weapons.Shotgun)));
+                temp[i] = Instantiate(playerShotgunPelletPrefab, weaponBarrelOrigins[3].transform.position, quaternionPlayerToMouse * Quaternion.Euler(0,0,0 + HandleWeaponSpread(PlayerWeaponDictionary.Weapons.Shotgun)));
                 PlayerBulletScript tempBulletScript = temp[i].GetComponent<PlayerBulletScript>();
                 temp[i].transform.localScale = new Vector2(weaponValues[(int)PlayerWeaponDictionary.Weapons.Shotgun][weaponProjectileSizeElement],weaponValues[(int)PlayerWeaponDictionary.Weapons.Shotgun][weaponProjectileSizeElement]/2);
                 tempBulletScript.SetBulletValues(weaponValues[(int)PlayerWeaponDictionary.Weapons.Shotgun][weaponRangeElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.Shotgun][weaponDamageElement], HandleVaryingShotspeed(PlayerWeaponDictionary.Weapons.Shotgun,3),weaponValues[(int)PlayerWeaponDictionary.Weapons.Shotgun][weaponKnockbackElement]);
             }
+            ScreenShakeScript.screenShake.AddShake(.5f,weaponValues[(int)PlayerWeaponDictionary.Weapons.Shotgun][weaponDamageElement]*9 + weaponValues[(int)PlayerWeaponDictionary.Weapons.Shotgun][weaponShotspeedElement]);
         };
         rifleFire = () => // Rifle
         {
-            GameObject temp = Instantiate(playerBulletPrefab, transform.position, quaternionPlayerToMouse * Quaternion.Euler(0,0,0 + HandleWeaponSpread(PlayerWeaponDictionary.Weapons.Rifle)));
+            GameObject temp = Instantiate(playerBulletPrefab, weaponBarrelOrigins[4].transform.position, quaternionPlayerToMouse * Quaternion.Euler(0,0,0 + HandleWeaponSpread(PlayerWeaponDictionary.Weapons.Rifle)));
             PlayerBulletScript tempBulletScript = temp.GetComponent<PlayerBulletScript>();
             temp.transform.localScale = new Vector2(weaponValues[(int)PlayerWeaponDictionary.Weapons.Rifle][weaponProjectileSizeElement],weaponValues[(int)PlayerWeaponDictionary.Weapons.Rifle][weaponProjectileSizeElement]);
             tempBulletScript.SetBulletValues(weaponValues[(int)PlayerWeaponDictionary.Weapons.Rifle][weaponRangeElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.Rifle][weaponDamageElement], weaponValues[(int)PlayerWeaponDictionary.Weapons.Rifle][weaponShotspeedElement],weaponValues[(int)PlayerWeaponDictionary.Weapons.Rifle][weaponKnockbackElement]);
         };
         grenadeLauncherFire = () => // Grenade Launcher
         {
-            Instantiate(playerGrenadePrefab, transform.position, quaternionPlayerToMouse);
+            Instantiate(playerGrenadePrefab, weaponBarrelOrigins[5].transform.position, quaternionPlayerToMouse);
         };
     }
 
