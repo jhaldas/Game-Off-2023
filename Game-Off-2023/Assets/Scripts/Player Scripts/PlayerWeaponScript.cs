@@ -463,6 +463,20 @@ public class PlayerWeaponScript : MonoBehaviour
         }
     }
 
+    public bool[] GetUnlockedWeapon()
+    {
+        bool[] ret = new bool[Enum.GetValues(typeof(PlayerWeaponDictionary.Weapons)).Length];
+
+        int index = 0;
+        foreach (PlayerWeaponDictionary.Weapons weapon in Enum.GetValues(typeof(PlayerWeaponDictionary.Weapons))) 
+        {
+            ret[index] = playerWeapons.GetHasWeapon(weapon);
+            index++;
+        }
+
+        return ret;
+    }
+
 }
 
 /**
